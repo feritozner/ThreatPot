@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in to your account</title>
+    <style>
+        body {
+            font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            background-color: #f3f2f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-card {
+            background: #ffffff;
+            padding: 44px;
+            width: 100%;
+            max-width: 360px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            box-sizing: border-box;
+        }
+        .logo { font-size: 1.5rem; font-weight: 600; color: #242424; margin-bottom: 24px; }
+        .title { font-size: 1.5rem; font-weight: 600; margin-bottom: 16px; color: #1b1b1b; }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px 0;
+            margin-bottom: 16px;
+            border: none;
+            border-bottom: 1px solid #605e5c;
+            outline: none;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            transition: border-bottom 0.2s;
+        }
+        input:focus { border-bottom: 2px solid #0078d4; }
+        .btn {
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            float: right;
+            margin-top: 10px;
+        }
+        .btn:hover { background-color: #106ebe; }
+        .btn:disabled { background-color: #c8c6c4; cursor: not-allowed; }
+        .error-text { color: #a4262c; font-size: 0.85rem; margin-top: 10px; display: none; }
+        .footer { margin-top: 40px; font-size: 0.8rem; color: #605e5c; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="logo">Corporate SSO</div>
+        <div class="title">Sign in</div>
+        <div style="margin-bottom: 20px; color: #323130;">to continue to Internal Apps</div>
+        
+        <form id="loginForm">
+            <input type="text" name="username" placeholder="someone@corp.local" required autocomplete="off">
+            <input type="password" name="password" placeholder="Password" required>
+            <div id="errorMsg" class="error-text"></div>
+            <button type="submit" class="btn" id="btnSubmit">Sign in</button>
+        </form>
+        
+        <div class="footer">
+            © 2026 Corporate IT Services
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnSubmit');
+            const msg = document.getElementById('errorMsg');
+            
+            btn.disabled = true;
+            btn.innerText = "Signing in...";
+            msg.style.display = "none";
+
+            try {
+                const formData = new FormData(this);
+                const response = await fetch('/api/v1/auth', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === "error") {
+                    msg.innerText = data.message;
+                    msg.style.display = "block";
+                }
+            } catch (err) {
+                msg.innerText = "Gateway unreachable. Please try again later.";
+                msg.style.display = "block";
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Sign in";
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+{
+    "status": "error",
+    "error_code": 401,
+    "message": "Invalid credentials or AD synchronization failure.",
+    "is_locked": false,
+    "timestamp": null
+}
