@@ -87,21 +87,55 @@ func StartServer(pot *core.Pot) error {
 		pot.Mutex.Unlock()
 
 		if routeExists {
+			// 1. API GET KORUMASI: Tarayıcıdan api'ye girerse tokatla
+			if strings.Contains(r.URL.Path, "/api/") && r.Method == "GET" {
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(http.StatusMethodNotAllowed)
+				w.Write([]byte(`{"status": "error", "message": "Method GET not allowed. Use POST."}`))
+				return
+			}
+
+			// 2. DOSYAYI OKU VE TÜRÜNÜ BELİRLE
 			content, err := templateFS.ReadFile(htmlFile)
 			if err == nil {
-				w.Header().Set("Content-Type", "text/html; charset=utf-8")
+				contentType := "text/html; charset=utf-8"
+				if strings.HasSuffix(htmlFile, ".json") {
+					contentType = "application/json" // JSON ise header'ı düzelt
+				}
+
+				w.Header().Set("Content-Type", contentType)
 				w.WriteHeader(http.StatusOK)
 				w.Write(content)
 				return
 			} else {
+				// Dosya rotada var ama diskte yoksa 500 dön
 				w.WriteHeader(http.StatusInternalServerError)
 				w.Write([]byte("<html><body><h1>500 Internal Server Error</h1></body></html>"))
 				return
 			}
-		}
+		} else {
+			// 3. ROTA HİÇ YOKSA: İşte bizim o mükemmel 404 sayfamız buraya gelecek!
+			content, err := templateFS.ReadFile("templates/404.html")
+			if err == nil {
+				htmlStr := string(content)
 
-		w.WriteHeader(http.StatusNotFound)
-		w.Write([]byte("<html><body><h1>404 Not Found</h1></body></html>"))
+				timestamp := time.Now().UTC().Format(time.RFC3339)
+				randPart1 := fmt.Sprintf("%06x", rand.Intn(16777215))
+				randPart2 := fmt.Sprintf("%04x", rand.Intn(65535))
+				corrID := fmt.Sprintf("req-%s-%s", randPart1, randPart2)
+
+				htmlStr = strings.Replace(htmlStr, "{{TIMESTAMP}}", timestamp, 1)
+				htmlStr = strings.Replace(htmlStr, "{{CORRELATION_ID}}", corrID, 1)
+
+				w.Header().Set("Content-Type", "text/html; charset=utf-8")
+				w.WriteHeader(http.StatusNotFound)
+				w.Write([]byte(htmlStr))
+			} else {
+				// 404.html bile silinmişse mecburi düz 404
+				http.NotFound(w, r)
+			}
+			return
+		}
 	})
 
 	server := &http.Server{Addr: addr, Handler: mux}

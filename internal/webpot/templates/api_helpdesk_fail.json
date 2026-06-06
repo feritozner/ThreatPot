@@ -1,0 +1,8 @@
+{
+    "status": "error",
+    "error_code": 401,
+    "module": "helpdesk_portal",
+    "message": "Valid SSO token is missing. Access to support ticketing system is denied.",
+    "redirect": false,
+    "timestamp": "UTC +03:00"
+}

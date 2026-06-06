@@ -7,66 +7,159 @@
     <style>
         body {
             font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-            background-color: #f3f2f1;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect width="100%" height="100%" fill="%23f3f2f1"/><circle cx="85%" cy="15%" r="40%" fill="%23e1dfdd" opacity="0.6"/><circle cx="15%" cy="85%" r="30%" fill="%23c8c6c4" opacity="0.4"/></svg>') no-repeat center center fixed;
+            background-size: cover;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
         }
+        .login-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
         .login-card {
             background: #ffffff;
             padding: 44px;
             width: 100%;
-            max-width: 360px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            max-width: 440px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
             box-sizing: border-box;
         }
-        .logo { font-size: 1.5rem; font-weight: 600; color: #242424; margin-bottom: 24px; }
-        .title { font-size: 1.5rem; font-weight: 600; margin-bottom: 16px; color: #1b1b1b; }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .logo-square {
+            width: 32px;
+            height: 32px;
+            background-color: #0078d4;
+            margin-right: 12px;
+        }
+        .logo-text { font-size: 1.4rem; font-weight: 600; color: #242424; }
+        .title { font-size: 1.5rem; font-weight: 600; margin-bottom: 24px; color: #1b1b1b; }
+        
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
         input[type="text"], input[type="password"] {
             width: 100%;
             padding: 10px 0;
-            margin-bottom: 16px;
             border: none;
-            border-bottom: 1px solid #605e5c;
+            border-bottom: 1px solid #8a8886;
             outline: none;
             font-size: 0.95rem;
             box-sizing: border-box;
+            background-color: transparent;
             transition: border-bottom 0.2s;
         }
         input:focus { border-bottom: 2px solid #0078d4; }
+        input::placeholder { color: transparent; }
+        .floating-label {
+            position: absolute;
+            pointer-events: none;
+            left: 0;
+            top: 10px;
+            color: #605e5c;
+            transition: 0.2s ease all;
+        }
+        input:focus ~ .floating-label,
+        input:not(:placeholder-shown) ~ .floating-label {
+            top: -12px;
+            font-size: 0.75rem;
+            color: #0078d4;
+        }
+        
+        .links { font-size: 0.85rem; margin-bottom: 24px; }
+        .links a { color: #0078d4; text-decoration: none; display: block; margin-bottom: 8px; }
+        .links a:hover { text-decoration: underline; }
+        
+        .action-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 32px;
+        }
         .btn {
             background-color: #0078d4;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 10px 32px;
             font-size: 0.95rem;
             cursor: pointer;
-            float: right;
-            margin-top: 10px;
+            transition: background-color 0.2s;
         }
         .btn:hover { background-color: #106ebe; }
         .btn:disabled { background-color: #c8c6c4; cursor: not-allowed; }
-        .error-text { color: #a4262c; font-size: 0.85rem; margin-top: 10px; display: none; }
-        .footer { margin-top: 40px; font-size: 0.8rem; color: #605e5c; }
+        
+        .error-box { 
+            background-color: #fde7e9;
+            color: #a4262c; 
+            padding: 12px 16px;
+            font-size: 0.85rem; 
+            margin-bottom: 20px; 
+            display: none; 
+            border-left: 3px solid #d13438;
+            line-height: 1.4;
+        }
+        
+        .sign-in-options {
+            background: #ffffff;
+            width: 100%;
+            max-width: 440px;
+            padding: 16px 44px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+            margin-top: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+        .sign-in-options:hover { background-color: #f3f2f1; }
+        .key-icon { margin-right: 12px; font-size: 1.2rem; }
     </style>
 </head>
 <body>
-    <div class="login-card">
-        <div class="logo">Corporate SSO</div>
-        <div class="title">Sign in</div>
-        <div style="margin-bottom: 20px; color: #323130;">to continue to Internal Apps</div>
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div class="logo-container">
+                <div class="logo-square"></div>
+                <div class="logo-text">Corporate Gateway</div>
+            </div>
+            <div class="title">Sign in</div>
+            
+            <div id="errorMsg" class="error-box"></div>
+            
+            <form id="loginForm">
+                <div class="input-group">
+                    <input type="text" name="username" id="username" placeholder=" " required autocomplete="off">
+                    <label class="floating-label" for="username">someone@corp.local</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" name="password" id="password" placeholder=" " required>
+                    <label class="floating-label" for="password">Password</label>
+                </div>
+                
+                <div class="links">
+                    <a href="#">Can't access your account?</a>
+                    </div>
+                
+                <div class="action-row">
+                    <button type="submit" class="btn" id="btnSubmit">Sign in</button>
+                </div>
+            </form>
+        </div>
         
-        <form id="loginForm">
-            <input type="text" name="username" placeholder="someone@corp.local" required autocomplete="off">
-            <input type="password" name="password" placeholder="Password" required>
-            <div id="errorMsg" class="error-text"></div>
-            <button type="submit" class="btn" id="btnSubmit">Sign in</button>
-        </form>
-        
-        <div class="footer">
-            © 2026 Corporate IT Services
+        <div class="sign-in-options" onclick="alertOptions()">
+            <span class="key-icon">🔑</span>
+            <span style="font-size: 0.95rem; color: #1b1b1b;">Sign-in options</span>
         </div>
     </div>
 
@@ -77,7 +170,7 @@
             const msg = document.getElementById('errorMsg');
             
             btn.disabled = true;
-            btn.innerText = "Signing in...";
+            btn.innerText = "Please wait...";
             msg.style.display = "none";
 
             try {
@@ -90,17 +183,23 @@
                 const data = await response.json();
                 
                 if (data.status === "error") {
-                    msg.innerText = data.message;
+                    msg.innerHTML = `<strong>Sign-in failed:</strong><br>${data.message}`;
                     msg.style.display = "block";
                 }
             } catch (err) {
-                msg.innerText = "Gateway unreachable. Please try again later.";
+                msg.innerHTML = "<strong>System Error:</strong><br>Connection to authentication gateway timed out.";
                 msg.style.display = "block";
             } finally {
                 btn.disabled = false;
                 btn.innerText = "Sign in";
             }
         });
+
+        function alertOptions() {
+            const msg = document.getElementById('errorMsg');
+            msg.innerHTML = `<strong>Action not supported:</strong><br>Smart Card or FIDO2 key authentication requires a direct Intranet connection.`;
+            msg.style.display = "block";
+        }
     </script>
 </body>
 </html>

@@ -15,7 +15,7 @@ const (
 func PrintBanner() {
 	clearScreen()
 	fmt.Printf(ColorGreen + ` 
- _____                      _   ____       _   
+ _____ _                    _   ____       _   
 |_   _| |__  _ __ ___  __ _| |_|  _ \ ___ | |_ 
   | | | '_ \| '__/ _ \/ _' | __| |_) / _ \| __|
   | | | | | | | |  __/ (_| | |_|  __/ (_) | |_ 
@@ -45,6 +45,7 @@ func printHelp() {
 	fmt.Println("  stop          - Stop the selected honeypot")
 	fmt.Println("  logs          - View static history logs (logs * for all)")
 	fmt.Println("  watch         - LIVE view of logs (Press Enter to exit)")
+	fmt.Println("  inspect [id]  - View request dump details (e.g. inspect 3)")
 	fmt.Println("  history       - Show previously typed commands")
 	fmt.Println("  export id|all - Export request(s) to dumps/ folder")
 	fmt.Println("  back          - Return to main context")

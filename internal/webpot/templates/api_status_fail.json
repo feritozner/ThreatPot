@@ -1,0 +1,8 @@
+{
+    "status": "error",
+    "error_code": 401,
+    "module": "system_health",
+    "message": "Unauthorized request to metrics endpoint.",
+    "redirect": false,
+    "required_roles": ["sysadmin", "network_ops"]
+}

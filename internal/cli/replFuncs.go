@@ -109,7 +109,7 @@ func startPot(currentContext string) {
 	if err := webpot.StartServer(pot); err != nil {
 		fmt.Printf("%s[-] Failed to start: %v%s\n", ColorRed, err, ColorReset)
 	} else {
-		fmt.Printf("%s[+] %s started on %s:%d%s\n", ColorGreen, pot.Name, pot.BindIP, pot.Port, ColorReset)
+		fmt.Printf("%s[+] %s started on %s:%d%s\n", ColorYellow, pot.Name, pot.BindIP, pot.Port, ColorReset)
 	}
 }
 
@@ -174,7 +174,7 @@ func showCommand(currentContext string, parts []string) {
 				fmt.Printf("  - %-10s (Port: %-4d Status: %-7s) => %s\n", name, p.Port, status, p.Description)
 			}
 			fmt.Println()
-		} else if parts[1] == "options" && currentContext != "" {
+		} else if parts[1] == "options" && currentContext != "null" {
 			p := core.Pots[currentContext]
 			fmt.Printf("\n%sOptions for %s:%s\n", ColorYellow, p.Name, ColorReset)
 			fmt.Printf("  Description   : %s\n", p.Description)
@@ -279,7 +279,7 @@ func inspectRequest(currentContext string, parts []string) {
 			fmt.Printf("Time   : %s\n", req.Time)
 			fmt.Printf("IP     : %s\n", req.IP)
 			fmt.Println(strings.Repeat("-", 45))
-			fmt.Printf("%s%s%s\n", ColorGreen, req.RawData, ColorReset)
+			fmt.Printf("%s%s%s\n", ColorReset, req.RawData, ColorReset)
 			fmt.Printf("%s=============================================%s\n\n", ColorCyan, ColorReset)
 			found = true
 			break
@@ -374,7 +374,7 @@ func handleWatchCommand(parts []string) {
 	var targets []*core.Pot
 
 	if len(parts) == 1 {
-		if currentContext != "" {
+		if currentContext != "null" {
 			targets = append(targets, core.Pots[currentContext])
 		} else {
 			fmt.Printf("%s[-] Usage: watch <pot_name> OR watch *%s\n", ColorRed, ColorReset)

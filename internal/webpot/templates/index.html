@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internal Workspace - Corporate Portal</title>
+    <style>
+        body {
+            font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            background-color: #f3f2f1;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .header {
+            background-color: #0078d4;
+            color: white;
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        .header-links span {
+            margin-left: 24px;
+            font-size: 0.9rem;
+            font-weight: 400;
+            opacity: 0.9;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .header-links span:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+        /* YENİ: Microsoft tarzı bildirim şeridi */
+        .notification-bar {
+            background-color: #fde7e9;
+            color: #a4262c;
+            padding: 12px 32px;
+            font-size: 0.9rem;
+            display: none;
+            align-items: center;
+            border-bottom: 1px solid #d13438;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            animation: slideDown 0.3s ease-out;
+        }
+        .notification-bar.warning {
+            background-color: #fff4ce;
+            color: #797775;
+            border-bottom: 1px solid #f2c811;
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .portal-card {
+            background: #ffffff;
+            padding: 48px 40px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            text-align: center;
+            box-sizing: border-box;
+        }
+        .app-icon {
+            display: inline-block;
+            width: 64px;
+            height: 64px;
+            background-color: #f3f2f1;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            position: relative;
+        }
+        .app-icon::after {
+            content: "";
+            position: absolute;
+            top: 20px; left: 20px; right: 20px; bottom: 20px;
+            background-color: #0078d4;
+            border-radius: 4px;
+        }
+        .title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1b1b1b;
+            margin-bottom: 16px;
+        }
+        .desc {
+            color: #605e5c;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 32px;
+        }
+        .btn-connect {
+            display: inline-block;
+            background-color: #0078d4;
+            color: white;
+            text-decoration: none;
+            padding: 10px 32px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn-connect:hover {
+            background-color: #106ebe;
+        }
+        .footer {
+            text-align: center;
+            padding: 24px;
+            font-size: 0.8rem;
+            color: #605e5c;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div>Corporate Workspace</div>
+        <div class="header-links">
+            <span onclick="checkAccess('helpdesk')">IT Helpdesk</span>
+            <span onclick="checkAccess('status')">System Status</span>
+        </div>
+    </div>
+
+    <div id="notifyBar" class="notification-bar"></div>
+
+    <div class="container">
+        <div class="portal-card">
+            <div class="app-icon"></div>
+            <div class="title">Welcome to Internal Workspace</div>
+            <div class="desc">
+                You are attempting to access a secured corporate environment. Authentication via the Centralized SSO Gateway is required to continue to internal applications and services.
+            </div>
+            
+            <a href="/login" class="btn-connect">Authenticate with SSO</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        Protected by Corporate Security Operations Center
+    </div>
+
+    <script>
+        async function checkAccess(module) {
+            const bar = document.getElementById('notifyBar');
+            
+            bar.className = 'notification-bar warning';
+            bar.innerText = `Connecting to gateway...`;
+            bar.style.display = 'flex';
+
+            try {
+                
+                let endpoint = module === 'helpdesk' ? '/api/v2/helpdesk' : '/api/v2/status';
+                
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                const data = await response.json();
+                
+                bar.className = 'notification-bar';
+                bar.innerHTML = `<strong>Error ${data.error_code}:</strong> ${data.message}`;
+
+            } catch (err) {
+                bar.className = 'notification-bar';
+                bar.innerText = "Gateway connection failed. Please check your network.";
+            }
+        }
+    </script>
+</body>
+</html>

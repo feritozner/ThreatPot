@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - Corporate Portal</title>
+    <style>
+        body {
+            font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            background-color: #f3f2f1;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .header {
+            background-color: #0078d4;
+            color: white;
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .portal-card {
+            background: #ffffff;
+            padding: 48px 40px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            text-align: center;
+            box-sizing: border-box;
+            border-top: 4px solid #a4262c;
+        }
+        .error-code {
+            font-size: 4rem;
+            font-weight: 300;
+            color: #a4262c;
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+        .title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1b1b1b;
+            margin-bottom: 16px;
+        }
+        .desc {
+            color: #605e5c;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+        .trace-box {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 12px;
+            font-size: 0.85rem;
+            color: #797775;
+            margin-bottom: 32px;
+            text-align: left;
+            font-family: monospace;
+            word-break: break-all;
+        }
+        .btn-connect {
+            display: inline-block;
+            background-color: #0078d4;
+            color: white;
+            text-decoration: none;
+            padding: 10px 32px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn-connect:hover {
+            background-color: #106ebe;
+        }
+        .footer {
+            text-align: center;
+            padding: 24px;
+            font-size: 0.8rem;
+            color: #605e5c;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div>Corporate Workspace</div>
+        <div style="font-size: 0.9rem; font-weight: 400; opacity: 0.9;">System Alert</div>
+    </div>
+
+    <div class="container">
+        <div class="portal-card">
+            <div class="error-code">404</div>
+            <div class="title">Resource Not Found</div>
+            <div class="desc">
+                The requested endpoint or resource does not exist on this gateway. If you followed a valid link, the application may have been migrated to the v2 infrastructure.
+            </div>
+            
+            <div class="trace-box">
+                <div><strong>Diagnostic Info:</strong></div>
+                <div>Timestamp: <span>{{TIMESTAMP}}</span></div>
+                <div>Correlation ID: <span>{{CORRELATION_ID}}</span></div>
+            </div>
+            
+            <a href="/" class="btn-connect">Return to Gateway</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        Protected by Corporate Security Operations Center
+    </div>
+
+</body>
+</html>
