@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"net/http"
 	"net/http/httputil"
+	"os"
 	"strings"
 	"threatpot/internal/core"
 	"time"
@@ -87,7 +88,7 @@ func StartServer(pot *core.Pot) error {
 		pot.Mutex.Unlock()
 
 		if routeExists {
-			// 1. API GET KORUMASI: Tarayıcıdan api'ye girerse tokatla
+
 			if strings.Contains(r.URL.Path, "/api/") && r.Method == "GET" {
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusMethodNotAllowed)
@@ -95,12 +96,18 @@ func StartServer(pot *core.Pot) error {
 				return
 			}
 
-			// 2. DOSYAYI OKU VE TÜRÜNÜ BELİRLE
-			content, err := templateFS.ReadFile(htmlFile)
+			var content []byte
+			var err error
+
+			content, err = os.ReadFile(htmlFile)
+			if err != nil {
+				content, err = templateFS.ReadFile(htmlFile)
+			}
+
 			if err == nil {
 				contentType := "text/html; charset=utf-8"
 				if strings.HasSuffix(htmlFile, ".json") {
-					contentType = "application/json" // JSON ise header'ı düzelt
+					contentType = "application/json"
 				}
 
 				w.Header().Set("Content-Type", contentType)
@@ -108,13 +115,13 @@ func StartServer(pot *core.Pot) error {
 				w.Write(content)
 				return
 			} else {
-				// Dosya rotada var ama diskte yoksa 500 dön
+
 				w.WriteHeader(http.StatusInternalServerError)
 				w.Write([]byte("<html><body><h1>500 Internal Server Error</h1></body></html>"))
 				return
 			}
 		} else {
-			// 3. ROTA HİÇ YOKSA: İşte bizim o mükemmel 404 sayfamız buraya gelecek!
+
 			content, err := templateFS.ReadFile("templates/404.html")
 			if err == nil {
 				htmlStr := string(content)
@@ -131,7 +138,6 @@ func StartServer(pot *core.Pot) error {
 				w.WriteHeader(http.StatusNotFound)
 				w.Write([]byte(htmlStr))
 			} else {
-				// 404.html bile silinmişse mecburi düz 404
 				http.NotFound(w, r)
 			}
 			return
