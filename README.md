@@ -2,11 +2,11 @@
 ThreatPot is a tactical, high-interaction web honeypot framework written in Go. It is designed to lure attackers into "rabbit holes" by simulating realistic corporate portals and vulnerable backend APIs.
 
 # ScreenShots
+![SS3](assets/Screenshot_3.png)
+
 ![SS1](assets/Screenshot_1.png)
 
 ![SS2](assets/Screenshot_2.png)
-
-![SS3](assets/Screenshot_3.png)
 
 
 ### ⚠️ OPSEC WARNING: DO NOT RUN ON BARE METAL
@@ -20,3 +20,9 @@ In the event of an unforeseen vulnerability (e.g., a parser bug, memory exhausti
 * Always deploy ThreatPot in a strictly isolated environment, such as a dedicated Virtual Machine (VM), a sandboxed container, or an isolated VLAN with no access to your internal network.
 * You are solely responsible for the traffic you attract. Use at your own risk.
 
+### Disclaimer
+This project is intended for educational and ethical security research purposes only. Do not misuse this information against systems without proper authorization. The author is not responsible for any misuse or illegal activities.
+
+### Follow me for more: <br>
+- <img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/twitter.svg" alt="feritozner" height="15" width="20" /> <a href="https://twitter.com/feritozner" target="blank"> Twitter </a> <br>
+- <img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="ferit-ozner" height="15" width="20" /> <a href="https://linkedin.com/in/ferit-ozner" target="blank"> Linkedin </a> <br>
