@@ -1,5 +1,5 @@
 # ThreatPot
-ThreatPot is a tactical, high-interaction web honeypot framework written in Go. It is designed to lure attackers into "rabbit holes" by simulating realistic corporate portals and vulnerable backend APIs.
+ThreatPot is a tactical, high-interaction web honeypot framework written in Go. It is designed to lure attackers into "rabbit holes" by simulating realistic corporate portals and backend APIs.
 
 # ScreenShots
 ![SS3](assets/Screenshot_3.png)
